@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import PyPDF2
+import nltk
+import os
 from pyresparser import ResumeParser
 from sklearn.neighbors import NearestNeighbors
 from src.components.job_recommender import ngrams,getNearestN,jd_df
@@ -9,6 +11,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Function to process the resume and recommend jobs
 def process_resume(file_path):
+    os.environ['NLTK_DATA'] = '/opt/render/project/src/nltk_data'
+
+    # Ensure that the directory specified by NLTK_DATA exists
+    nltk_data_dir = os.environ['NLTK_DATA']
+    if not os.path.exists(nltk_data_dir):
+        os.makedirs(nltk_data_dir)
+
+    # Download NLTK stopwords resource if not already downloaded
+    nltk.download('stopwords', download_dir=nltk_data_dir)
     # Extract text from PDF resume
     resume_skills=skills_extraction.skills_extractor1(file_path)
 
